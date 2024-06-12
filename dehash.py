@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import time
 import re
 import os
 import shutil
@@ -14,86 +15,136 @@ nltk.download('words')
 # Predefined replacement rules
 specific_replacements = {}
 
-def add_specific_replacement(pattern, replacement):
-    specific_replacements[pattern] = replacement
+def add_specific_replacement(pattern, replacement, guard):
+    """Add a specific replacement rule to the dictionary."""
+    specific_replacements[pattern] = (replacement, guard)
 
-# Adding initial rule for specific replacement
-add_specific_replacement(r".*Imported #(\d+) \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)", "BLOCK")
+add_specific_replacement(
+        r".*Imported #(\d+) \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)", 
+        "BLOCK", 
+        "Imported"
+)
+add_specific_replacement(
+        r".*substrate_test_runtime_transaction_pool: add_block: (\d+) (0x[0-9a-f]{64}) .*", 
+        "BLOCK", 
+        "add_block"
+)
+
+def filter_and_findall(content, guard_pattern, find_pattern):
+    """Filter lines by guard pattern and find all matches of find pattern. This
+    is to pre-filter content before using regex."""
+    lines = content.split('\n')
+    filtered_lines = [line for line in lines if re.search(guard_pattern, line)]
+    filtered_content = '\n'.join(filtered_lines)
+    return re.findall(find_pattern, filtered_content)
+
+def replace_matches_in_place(content, pattern, replacement):
+    """Replace matches in content using the replacement function which is
+    intended to map the match (hash) to replacement word. The copy of the
+    content is built incrementally. Avoids multiple memcpy operations."""
+    matches = [(match.start(), match.end(),match.group()) for match in re.finditer(pattern, content)]
+    parts = []
+    last_end = 0
+    
+    for start, end, match_text in matches:
+        parts.append(content[last_end:start])
+        parts.append(replacement(match_text))
+        last_end = end
+    
+    parts.append(content[last_end:])
+    return ''.join(parts)
 
 def create_backup(file_path):
+    """Create a backup of the given file."""
     backup_path = file_path + ".bak"
     shutil.copy(file_path, backup_path)
     print(f"Backup created at {backup_path}")
 
 def get_four_letter_words():
-    four_letter_words = [word.upper() for word in words.words() if len(word) == 4]
+    """Get a shuffled list of four to six letter words."""
+    four_letter_words = [word.upper() for word in words.words() if 4 <= len(word) <= 6]
+    random.shuffle(four_letter_words)
     return four_letter_words
 
 # Pre-fetch the list of four-letter words
 four_letter_words = get_four_letter_words()
 
 def generate_word():
-    word = random.choice(four_letter_words)
-    four_letter_words.remove(word)
-    return word
+    """Generate a four-letter word from the pre-fetched list."""
+    return four_letter_words.pop()
 
 def generate_short_hash(long_hash):
+    """Generate a short hash from a long hash."""
     return f"0x{long_hash[2:6]}…{long_hash[-4:]}"
 
 def replace_hashes(content):
-    # Find all long hashes
+    """Build dictionary and replace hashes in the content."""
+    start_time = time.time()
     long_hashes = re.findall(r'0x[0-9a-f]{64}', content)
     short_hashes = re.findall(r'0x[0-9a-f]{4}…[0-9a-f]{4}', content)
+    print(f"1 Execution time: {time.time() - start_time}")
 
     # Create a dictionary to map short hashes to words
     hash_to_word = {}
 
-    for long_hash in long_hashes:
-        short_hash = generate_short_hash(long_hash)
-        if short_hash not in hash_to_word:
-            word = generate_word()
-            hash_to_word[short_hash] = word
+    start_time = time.time()
+    for pattern, (replacement_prefix, guard) in specific_replacements.items():
+        match_start_time = time.time()
+        matches = filter_and_findall(content, guard, pattern)
+        print(f"X Execution time: {time.time() - match_start_time}")
 
-    for short_hash in short_hashes:
-        if short_hash not in hash_to_word:
-            word = generate_word()
-            hash_to_word[short_hash] = word
-
-    # Apply specific replacements
-    for pattern, replacement_prefix in specific_replacements.items():
-        print(pattern)
-        matches = re.findall(pattern, content)
         for match in matches:
             print(match)
             number = match[0]
             h = match[1]
+            if len(h) == 66:
+                h = generate_short_hash(h)
+
             replacement_word = f"{replacement_prefix}{number}"
-            # content = re.sub(rf'{h}', replacement_word, content)
 
             final_word = replacement_word
             suffix = 1
+
             while final_word in hash_to_word.values():
                 final_word = f"{replacement_word}f{suffix:02d}"
                 suffix += 1
 
             hash_to_word[h] = final_word
+    print(f"2 Execution time: {time.time() - start_time}")
 
-    # Replace short and long hashes in content
-    for short_hash, word in hash_to_word.items():
-        print(short_hash)
-        content = content.replace(short_hash, word)
-        long_hash_pattern = re.compile(rf'0x{short_hash[2:6]}[0-9a-f]+{short_hash[-4:]}')
-        content = long_hash_pattern.sub(word, content)
+    start_time = time.time()
+    for long_hash in long_hashes:
+        short_hash = generate_short_hash(long_hash)
+        if short_hash not in hash_to_word:
+            hash_to_word[short_hash] = generate_word()
+    print(f"3 Execution time: {time.time() - start_time}")
+
+    start_time = time.time()
+    for short_hash in short_hashes:
+        if short_hash not in hash_to_word:
+            hash_to_word[short_hash] = generate_word()
+    print(f"4 Execution time: {time.time() - start_time}")
+
+    print(f"long_hashes count: {len(long_hashes)}")
+    print(f"short_hashes count: {len(short_hashes)}")
+    print(f"hash_to_word count: {len(hash_to_word)}")
+
+    start_time = time.time()
+    content = replace_matches_in_place(content, r'0x[0-9a-f]{4}…[0-9a-f]{4}', lambda h: hash_to_word[h])
+    content = replace_matches_in_place(content, r'0x[0-9a-f]{64}', lambda h: hash_to_word[generate_short_hash(h)])
+    print(f"5 Execution time: {time.time() - start_time}")
 
     return content, hash_to_word
 
 def write_dictionary_to_file(file_path, hash_to_word):
+    """Write the hash-to-word dictionary to a file."""
     dict_file_path = file_path + ".dict"
     with open(dict_file_path, 'w') as dict_file:
         for short_hash, word in hash_to_word.items():
             dict_file.write(f"{short_hash}: {word}\n")
 
 def write_dot_file(content, file_path):
+    """Write a DOT file representing parent-child relationships."""
     dot_file_path = file_path + ".dot"
     lines = content.split('\n')
     edges = []
@@ -117,6 +168,7 @@ def write_dot_file(content, file_path):
     print(f"DOT file created at {dot_file_path}")
 
 def process_file(file_path, backup=False):
+    """Process the file by replacing hashes and creating backups if required."""
     if backup:
         create_backup(file_path)
 
@@ -132,7 +184,7 @@ def process_file(file_path, backup=False):
     write_dot_file(modified_content, file_path)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Replace hashes in log file with words.')
+    parser = argparse.ArgumentParser(description='Replace hashes in the log file with words.')
     parser.add_argument('file', type=str, help='Path to the log file.')
     parser.add_argument('-b', '--backup', action='store_true', help='Create a backup of the original file.')
 

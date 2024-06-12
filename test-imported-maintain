@@ -1,0 +1,61 @@
+2024-06-11 21:52:15.129  INFO tokio-runtime-worker substrate: 🏆 Imported #1 (0xdf18…c4ac → 0x0626…a11a)    
+2024-06-11 21:52:15.129  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(1, 0, 0)]] event:NewBestBlock { hash: 0x0626c20236b05022c206363171118c7881fc8b0cd8d0b4f6d155f3dc6919a11a, tree_route: None }  took:122.731µs    
+2024-06-11 21:52:18.007  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(2, 0, 0)]] event:NewBestBlock { hash: 0x028dd13e51d2506717ccd5805ba01d55b5075638466a9fb9cc16b6b4812d8955, tree_route: None }  took:178.051µs    
+2024-06-11 21:52:18.007  INFO tokio-runtime-worker substrate: 🏆 Imported #2 (0x0626…a11a → 0x028d…8955)    
+2024-06-11 21:52:21.013  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(3, 0, 0)]] event:NewBestBlock { hash: 0x76846df7d3378038af3ef3fe6a59f594a44f040b7b11e514426b9a6d8e83949b, tree_route: None }  took:132.931µs    
+2024-06-11 21:52:21.013  INFO tokio-runtime-worker substrate: 🏆 Imported #3 (0x028d…8955 → 0x7684…949b)    
+2024-06-11 21:52:22.551  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(3, 0, 0)]] event:Finalized { hash: 0x0626c20236b05022c206363171118c7881fc8b0cd8d0b4f6d155f3dc6919a11a, tree_route: [] }  took:102.751µs    
+2024-06-11 21:52:24.007  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(4, 0, 0)]] event:NewBestBlock { hash: 0xf8d786dc0ceb6ccdec7ea346c97117cb2d7118f4c62ac467b867d3fadc55d1a7, tree_route: None }  took:146.711µs    
+2024-06-11 21:52:24.007  INFO tokio-runtime-worker substrate: 🏆 Imported #4 (0x7684…949b → 0xf8d7…d1a7)    
+2024-06-11 21:52:25.221  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(4, 0, 0)]] event:Finalized { hash: 0x028dd13e51d2506717ccd5805ba01d55b5075638466a9fb9cc16b6b4812d8955, tree_route: [] }  took:93.141µs    
+2024-06-11 21:52:27.007  INFO tokio-runtime-worker substrate: 🏆 Imported #5 (0xf8d7…d1a7 → 0xaa9f…ed5b)    
+2024-06-11 21:52:27.084  INFO tokio-runtime-worker txpool: maintain: txs:(0, 4096) views:[1;[(5, 0, 4096)]] event:NewBestBlock { hash: 0xaa9ffe7ff51cfc925e92bc2187f1931c42f46a4dba430ce030c98d321f0bed5b, tree_route: None }  took:76.681533ms    
+2024-06-11 21:52:27.890  INFO tokio-runtime-worker txpool: maintain: txs:(0, 4096) views:[1;[(5, 0, 4096)]] event:Finalized { hash: 0x76846df7d3378038af3ef3fe6a59f594a44f040b7b11e514426b9a6d8e83949b, tree_route: [] }  took:315.913µs    
+2024-06-11 21:52:30.005  INFO tokio-runtime-worker substrate: 🏆 Imported #6 (0xaa9f…ed5b → 0x5148…5220)    
+2024-06-11 21:52:30.085  INFO tokio-runtime-worker txpool: maintain: txs:(0, 4096) views:[1;[(6, 0, 4096)]] event:NewBestBlock { hash: 0x51482651fa7c523ed0c59bd1167179c3577c3ab044ac34c86cf62ec5d6a25220, tree_route: None }  took:80.883737ms    
+2024-06-11 21:52:31.895  INFO tokio-runtime-worker txpool: maintain: txs:(0, 4096) views:[1;[(6, 0, 4096)]] event:Finalized { hash: 0xf8d786dc0ceb6ccdec7ea346c97117cb2d7118f4c62ac467b867d3fadc55d1a7, tree_route: [] }  took:290.783µs    
+2024-06-11 21:52:33.007  INFO tokio-runtime-worker substrate: 🏆 Imported #7 (0x5148…5220 → 0x28c2…56a8)    
+2024-06-11 21:52:33.080  INFO tokio-runtime-worker txpool: maintain: txs:(0, 4096) views:[1;[(7, 0, 4096)]] event:NewBestBlock { hash: 0x28c25d97a2d9d5b0cbbe81febdf53c0f068382c46a44e3a30ec5d84dd4cb56a8, tree_route: None }  took:72.801929ms    
+2024-06-11 21:52:34.565  INFO tokio-runtime-worker txpool: maintain: txs:(0, 4096) views:[1;[(7, 0, 4096)]] event:Finalized { hash: 0xaa9ffe7ff51cfc925e92bc2187f1931c42f46a4dba430ce030c98d321f0bed5b, tree_route: [] }  took:303.663µs    
+2024-06-11 21:52:36.006  INFO tokio-runtime-worker substrate: 🏆 Imported #8 (0x28c2…56a8 → 0xf891…bcbe)    
+2024-06-11 21:52:36.456  INFO tokio-runtime-worker txpool: maintain: txs:(0, 8192) views:[1;[(8, 0, 8192)]] event:NewBestBlock { hash: 0xf891abdca1a1ec1655059d0222858c07e0c94b6e213eb6ea09c0c542303dbcbe, tree_route: None }  took:450.158727ms    
+2024-06-11 21:52:37.234  INFO tokio-runtime-worker txpool: maintain: txs:(0, 8192) views:[1;[(8, 0, 8192)]] event:Finalized { hash: 0x51482651fa7c523ed0c59bd1167179c3577c3ab044ac34c86cf62ec5d6a25220, tree_route: [] }  took:579.365µs    
+2024-06-11 21:52:39.006  INFO tokio-runtime-worker substrate: 🏆 Imported #9 (0xf891…bcbe → 0xa091…e267)    
+2024-06-11 21:52:39.733  INFO tokio-runtime-worker txpool: maintain: txs:(0, 12288) views:[1;[(9, 0, 12288)]] event:NewBestBlock { hash: 0xa091edd8fff6149bbbb78e0f94e2ec6791d0be4241965d9dcc2c868e9c1be267, tree_route: None }  took:727.32219ms    
+2024-06-11 21:52:39.902  INFO tokio-runtime-worker txpool: maintain: txs:(0, 12288) views:[1;[(9, 0, 12288)]] event:Finalized { hash: 0x28c25d97a2d9d5b0cbbe81febdf53c0f068382c46a44e3a30ec5d84dd4cb56a8, tree_route: [] }  took:399.313µs    
+2024-06-11 21:52:42.007  INFO tokio-runtime-worker substrate: 🏆 Imported #10 (0xa091…e267 → 0xb798…8251)    
+2024-06-11 21:52:42.349  INFO tokio-runtime-worker txpool: maintain: txs:(0, 12288) views:[1;[(10, 0, 12288)]] event:NewBestBlock { hash: 0xb798cf88e4cedfb194e1c120d6f88915dc5e8cb94882a9b31554d6c9e9508251, tree_route: None }  took:342.322063ms    
+2024-06-11 21:52:43.905  INFO tokio-runtime-worker txpool: maintain: txs:(0, 16384) views:[1;[(10, 16384, 0)]] event:Finalized { hash: 0xf891abdca1a1ec1655059d0222858c07e0c94b6e213eb6ea09c0c542303dbcbe, tree_route: [] }  took:458.534µs    
+2024-06-11 21:52:52.632  INFO tokio-runtime-worker substrate: 🏆 Imported #11 (0xb798…8251 → 0x734a…947d)    
+2024-06-11 21:52:53.355  INFO tokio-runtime-worker txpool: maintain: txs:(0, 16384) views:[1;[(11, 10834, 0)]] event:NewBestBlock { hash: 0x734afc029017374abddd7623f59151f3ad8aa428b53bd6081625365feba5947d, tree_route: None }  took:722.291591ms    
+2024-06-11 21:52:58.678  INFO tokio-runtime-worker txpool: maintain: txs:(0, 16384) views:[1;[(11, 10834, 0)]] event:Finalized { hash: 0xa091edd8fff6149bbbb78e0f94e2ec6791d0be4241965d9dcc2c868e9c1be267, tree_route: [] }  took:410.504µs    
+2024-06-11 21:53:01.054  INFO tokio-runtime-worker substrate: 🏆 Imported #12 (0x734a…947d → 0xee89…4292)    
+2024-06-11 21:53:01.808  INFO tokio-runtime-worker txpool: maintain: txs:(0, 16384) views:[1;[(12, 8126, 0)]] event:NewBestBlock { hash: 0xee891f5f863176554c0fd4aec7560e77ad31212f0de5e313c6724327285f4292, tree_route: None }  took:754.404876ms    
+2024-06-11 21:53:10.437  INFO tokio-runtime-worker txpool: maintain: txs:(0, 16384) views:[1;[(12, 8126, 0)]] event:Finalized { hash: 0xb798cf88e4cedfb194e1c120d6f88915dc5e8cb94882a9b31554d6c9e9508251, tree_route: [] }  took:630.145µs    
+2024-06-11 21:53:10.799  INFO tokio-runtime-worker substrate: 🏆 Imported #13 (0xee89…4292 → 0x3acc…e44a)    
+2024-06-11 21:53:12.023  INFO tokio-runtime-worker txpool: maintain: txs:(0, 16384) views:[1;[(13, 2576, 0)]] event:NewBestBlock { hash: 0x3acc1952c721ee443a9eb3a0d8c4208d1535a5cc14477d4c5b30157af068e44a, tree_route: None }  took:1.223971166s    
+2024-06-11 21:53:12.130  INFO tokio-runtime-worker substrate: 🏆 Imported #14 (0x3acc…e44a → 0x0ae1…c591)    
+2024-06-11 21:53:13.406  INFO tokio-runtime-worker txpool: maintain: txs:(0, 16384) views:[1;[(14, 2576, 0)]] event:NewBestBlock { hash: 0x0ae170b43605e9f286d6921fc2cf9757db8ced74d0c5df7a616211f43f97c591, tree_route: None }  took:1.275966209s    
+2024-06-11 21:53:13.638  INFO tokio-runtime-worker txpool: maintain: txs:(0, 8126) views:[1;[(14, 2576, 0)]] event:Finalized { hash: 0xee891f5f863176554c0fd4aec7560e77ad31212f0de5e313c6724327285f4292, tree_route: [0x734afc029017374abddd7623f59151f3ad8aa428b53bd6081625365feba5947d] }  took:231.860943ms    
+2024-06-11 21:53:15.475  INFO tokio-runtime-worker substrate: 🏆 Imported #15 (0x0ae1…c591 → 0xb032…2834)    
+2024-06-11 21:53:16.103  INFO tokio-runtime-worker txpool: maintain: txs:(0, 8126) views:[1;[(15, 1115, 0)]] event:NewBestBlock { hash: 0xb032ebe95e3533eea5f666e0cba40078ac40d3fe92753d9b36bfe122c22a2834, tree_route: None }  took:627.849794ms    
+2024-06-11 21:53:17.290  INFO tokio-runtime-worker txpool: maintain: txs:(0, 2576) views:[1;[(15, 1115, 0)]] event:Finalized { hash: 0x3acc1952c721ee443a9eb3a0d8c4208d1535a5cc14477d4c5b30157af068e44a, tree_route: [] }  took:152.951898ms    
+2024-06-11 21:53:18.226  INFO tokio-runtime-worker substrate: 🏆 Imported #16 (0xb032…2834 → 0x3aa9…70f4)    
+2024-06-11 21:53:18.396  INFO tokio-runtime-worker txpool: maintain: txs:(0, 2576) views:[1;[(16, 0, 0)]] event:NewBestBlock { hash: 0x3aa98fc2d9104204b950eda9b1cd01481a4d367544330665afeec76b611070f4, tree_route: None }  took:170.450797ms    
+2024-06-11 21:53:19.775  INFO tokio-runtime-worker txpool: maintain: txs:(0, 2576) views:[1;[(16, 0, 0)]] event:Finalized { hash: 0x0ae170b43605e9f286d6921fc2cf9757db8ced74d0c5df7a616211f43f97c591, tree_route: [] }  took:211.251µs    
+2024-06-11 21:53:21.009  INFO tokio-runtime-worker substrate: 🏆 Imported #17 (0x3aa9…70f4 → 0xdc70…5671)    
+2024-06-11 21:53:21.249  INFO tokio-runtime-worker txpool: maintain: txs:(0, 2576) views:[1;[(17, 0, 0)]] event:NewBestBlock { hash: 0xdc703752bb306246ccce849a34e8c8285255cea41029394d9abdbbbe79ee5671, tree_route: None }  took:239.661044ms    
+2024-06-11 21:53:22.492  INFO tokio-runtime-worker txpool: maintain: txs:(0, 1115) views:[1;[(17, 0, 0)]] event:Finalized { hash: 0xb032ebe95e3533eea5f666e0cba40078ac40d3fe92753d9b36bfe122c22a2834, tree_route: [] }  took:33.328557ms    
+2024-06-11 21:53:24.005  INFO tokio-runtime-worker substrate: 🏆 Imported #18 (0xdc70…5671 → 0xd3fa…9666)    
+2024-06-11 21:53:24.109  INFO tokio-runtime-worker txpool: maintain: txs:(0, 1115) views:[1;[(18, 0, 0)]] event:NewBestBlock { hash: 0xd3faacc1f85cd6768ba99cf61a66a35a050aee63b229e80c66843879567b9666, tree_route: None }  took:103.315744ms    
+2024-06-11 21:53:25.153  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(18, 0, 0)]] event:Finalized { hash: 0x3aa98fc2d9104204b950eda9b1cd01481a4d367544330665afeec76b611070f4, tree_route: [] }  took:31.658572ms    
+2024-06-11 21:53:27.005  INFO tokio-runtime-worker substrate: 🏆 Imported #19 (0xd3fa…9666 → 0xdb4b…bd58)    
+2024-06-11 21:53:27.008  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(19, 0, 0)]] event:NewBestBlock { hash: 0xdb4bf710af6fc5e5acb0941d7473765afe7de6d1d4cc720551b59b15d670bd58, tree_route: None }  took:2.55247ms    
+2024-06-11 21:53:27.783  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(19, 0, 0)]] event:Finalized { hash: 0xdc703752bb306246ccce849a34e8c8285255cea41029394d9abdbbbe79ee5671, tree_route: [] }  took:109.511µs    
+2024-06-11 21:53:30.006  INFO tokio-runtime-worker substrate: 🏆 Imported #20 (0xdb4b…bd58 → 0xde0c…c522)    
+2024-06-11 21:53:30.006  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(20, 0, 0)]] event:NewBestBlock { hash: 0xde0c085c5c5a7aaf1e8a119a86d88b5a324a0c75fdd0381e36ca1ab52cbac522, tree_route: None }  took:456.683µs    
+2024-06-11 21:53:31.787  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(20, 0, 0)]] event:Finalized { hash: 0xd3faacc1f85cd6768ba99cf61a66a35a050aee63b229e80c66843879567b9666, tree_route: [] }  took:114.141µs    
+2024-06-11 21:53:33.005  INFO tokio-runtime-worker substrate: 🏆 Imported #21 (0xde0c…c522 → 0x0005…6914)    
+2024-06-11 21:53:33.005  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[1;[(21, 0, 0)]] event:NewBestBlock { hash: 0x00055442d29f25df2160a096d0f292046475a33f381af5ca3fca0d5157606914, tree_route: None }  took:334.492µs    
+2024-06-11 21:53:33.007  INFO tokio-runtime-worker substrate: 🏆 Imported #21 (0xde0c…c522 → 0xdcd3…b73c)    
+2024-06-11 21:53:33.007  INFO tokio-runtime-worker txpool: maintain: txs:(0, 0) views:[2;[(21, 0, 0), (21, 0, 0)]] event:NewBestBlock { hash: 0xdcd35bc551015b9bf47c83a530d1eebe47884823cf2ac42a6580751eea55b73c, tree_route: Some(TreeRoute { route: [HashAndNumber { number: 21, hash: 0x00055442d29f25df2160a096d0f292046475a33f381af5ca3fca0d5157606914 }, HashAndNumber { number: 20, hash: 0xde0c085c5c5a7aaf1e8a119a86d88b5a324a0c75fdd0381e36ca1ab52cbac522 }], pivot: 1 }) }  took:179.192µs    
