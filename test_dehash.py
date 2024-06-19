@@ -16,14 +16,6 @@ class TestScript(unittest.TestCase):
         self.content = """Line 1: The quick brown fox jumps over the lazy dog.
         Line 2: [Relaychain] 🏆 Imported #1234 (0x1234…cdef → 0xabcd…5678)"""
 
-    def test_add_specific_replacement(self):
-        epattern = r'.*Imported #(\d+) (0x[0-9a-f]{64}.*0x[0-9a-f]{64})'
-        ereplacement = 'BLOCK'
-        eguard = 'Importedx'
-        add_specific_replacement(epattern, ereplacement, eguard)
-        (pattern, replacement_prefix, guard)= next(((pattern, replacement_prefix, guard) for (pattern, replacement_prefix, guard) in specific_replacements if guard == "Importedx"), None)
-        self.assertEqual((epattern, ereplacement, eguard), (pattern, replacement_prefix, guard))
-
     def test_filter_and_findall(self):
         (pattern, guard)= next(((pattern, guard) for (pattern, replacement_prefix, guard) in specific_replacements if guard == "Imported"), None)
         matches = filter_and_findall(self.content, guard, pattern)
@@ -193,6 +185,18 @@ class TestScriptRelayParachain(unittest.TestCase):
         modified_content, hash_to_word = replace_hashes(self.content)
         self.assertEqual(modified_content, expected)
 
+class TestSpecificReplacement(unittest.TestCase):
+    def test_add_specific_replacement(self):
+        epattern = r".*Importex #(\d+) \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)"
+        ereplacement = "XBLOCK"
+        eguard = "Importex"
+        add_specific_replacement(epattern, ereplacement, eguard)
+        (pattern, replacement_prefix, guard)= next(((pattern, replacement_prefix, guard) for (pattern, replacement_prefix, guard) in specific_replacements if guard == "Importex"), None)
+        self.assertEqual((epattern, ereplacement, eguard), (pattern, replacement_prefix, guard))
+        some_content = """Line 1: The quick brown fox jumps over the lazy dog.
+        Line 2: [Relaychain] 🏆 Importex #1234 (0x1234…cdef → 0xabcd…5678)"""
+        modified_content, hash_to_word = replace_hashes(some_content)
+        self.assertIn('XBLOCK1234', modified_content)
 
 if __name__ == '__main__':
     unittest.main()

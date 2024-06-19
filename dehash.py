@@ -115,7 +115,7 @@ def replace_hashes(content):
         # print(f"X Execution time: {time.time() - match_start_time}")
 
         for match in matches:
-            # print(match)
+            print("found match:",match)
             number = match[0]
             h = match[1]
             if len(h) == 66:
