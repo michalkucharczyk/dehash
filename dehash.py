@@ -73,7 +73,7 @@ def create_backup(file_path):
 
 def get_words(length):
     """Get a shuffled list of four to six letter words."""
-    new_words = [word.upper() for word in words.words() if len(word) == length]
+    new_words = list({word.upper() for word in words.words() if len(word) == length})
     random.shuffle(new_words)
     return new_words
 
@@ -115,7 +115,7 @@ def replace_hashes(content):
         # print(f"X Execution time: {time.time() - match_start_time}")
 
         for match in matches:
-            print("found match:",match)
+            # print("found match:",match)
             number = match[0]
             h = match[1]
             if len(h) == 66:
