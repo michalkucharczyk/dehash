@@ -98,7 +98,7 @@ def generate_short_hash(long_hash):
     """Generate a short hash from a long hash."""
     return f"0x{long_hash[2:6]}…{long_hash[-4:]}"
 
-def replace_hashes(content):
+def replace_hashes(content, initial_hash_to_word):
     """Build dictionary and replace hashes in the content."""
     start_time = time.time()
     long_hashes = re.findall(r'0x[0-9a-f]{64}', content)
@@ -106,7 +106,7 @@ def replace_hashes(content):
     # print(f"1 Execution time: {time.time() - start_time}")
 
     # Create a dictionary to map short hashes to words
-    hash_to_word = {}
+    hash_to_word = initial_hash_to_word
 
     start_time = time.time()
     for (pattern, replacement_prefix, guard) in specific_replacements:
@@ -164,6 +164,16 @@ def write_dictionary_to_file(file_path, hash_to_word):
         for short_hash, word in hash_to_word.items():
             dict_file.write(f"{short_hash}: {word}\n")
 
+def read_dictionary_from_file(file_path):
+    """Read the hash-to-word dictionary from a file."""
+    dict_file_path = file_path + ".dict"
+    hash_to_word = {}
+    with open(dict_file_path, 'r') as dict_file:
+        for line in dict_file:
+            short_hash, word = line.strip().split(": ")
+            hash_to_word[short_hash] = word
+    return hash_to_word
+
 def write_dot_file(content, file_path):
     """Write a DOT file representing parent-child relationships."""
     dot_file_path = file_path + ".dot"
@@ -181,14 +191,14 @@ def write_dot_file(content, file_path):
     # Write to dot file
     with open(dot_file_path, 'w') as dot_file:
         dot_file.write("digraph G {\n")
-        dot_file.write("    rankdir=LR;\n")
+        dot_file.write("    rankdir=BT;\n")
         for parent, child in edges:
             dot_file.write(f'    "{child}" -> "{parent}";\n')
         dot_file.write("}\n")
 
     # print(f"DOT file created at {dot_file_path}")
 
-def process_file(file_path, backup=False):
+def process_file(file_path, backup, initial_hash_to_word):
     """Process the file by replacing hashes and creating backups if required."""
     if backup:
         create_backup(file_path)
@@ -196,7 +206,7 @@ def process_file(file_path, backup=False):
     with open(file_path, 'r') as file:
         content = file.read()
 
-    modified_content, hash_to_word = replace_hashes(content)
+    modified_content, hash_to_word = replace_hashes(content, initial_hash_to_word)
 
     with open(file_path, 'w') as file:
         file.write(modified_content)
@@ -208,7 +218,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Replace hashes in the log file with words.')
     parser.add_argument('file', type=str, help='Path to the log file.')
     parser.add_argument('-b', '--backup', action='store_true', help='Create a backup of the original file.')
-
+    parser.add_argument('-d', '--dict-file', type=str, help='Dictionary file name', required=False)
     args = parser.parse_args()
 
-    process_file(args.file, args.backup)
+    initial_hash_to_word = {}
+    if args.dict_file:
+        initial_hash_to_word = read_dictionary_from_file(args.dict_file)
+
+    process_file(args.file, args.backup, initial_hash_to_word)

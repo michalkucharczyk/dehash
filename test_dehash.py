@@ -46,7 +46,7 @@ class TestScript(unittest.TestCase):
         self.assertEqual(short_hash, "0x1234…cdef")
 
     def test_replace_hashes(self):
-        modified_content, hash_to_word = replace_hashes(self.content)
+        modified_content, hash_to_word = replace_hashes(self.content, {})
         self.assertIn('RBLOCK1234', modified_content)
         self.assertTrue(any(re.match(r'0x[0-9a-f]{4}…[0-9a-f]{4}', k) for k in hash_to_word.keys()))
 
@@ -91,7 +91,7 @@ class TestScriptBlockHashes(unittest.TestCase):
 2024-06-11 21:52:30.005  INFO tokio-runtime-worker substrate: 🏆 Imported #6 (BLOCK5 → BLOCK6)    
 2024-06-11 21:52:30.085  INFO tokio-runtime-worker txpool: maintain: txs:(0, 4096) views:[1;[(6, 0, 4096)]] event:NewBestBlock { hash: BLOCK6, tree_route: None }  took:80.883737ms    
 2024-06-11 21:52:31.895  INFO tokio-runtime-worker txpool: maintain: txs:(0, 4096) views:[1;[(6, 0, 4096)]] event:Finalized { hash: BLOCK4, tree_route: [] }  took:290.783µs"""
-        modified_content, hash_to_word = replace_hashes(self.content)
+        modified_content, hash_to_word = replace_hashes(self.content, {})
         self.assertEqual(modified_content, expected)
 
 class TestScriptBlockHashesForks(unittest.TestCase):
@@ -111,7 +111,7 @@ class TestScriptBlockHashesForks(unittest.TestCase):
 2024-06-11 21:53:33.005  INFO tokio-runtime-worker substrate: 🏆 Imported #21 (BLOCK20 → BLOCK21)    
 2024-06-11 21:53:33.007  INFO tokio-runtime-worker substrate: 🏆 Imported #21 (BLOCK20 → BLOCK21f01)    
         """
-        modified_content, hash_to_word = replace_hashes(self.content)
+        modified_content, hash_to_word = replace_hashes(self.content, {})
         self.assertEqual(modified_content, expected)
 
 class TestScriptHashes(unittest.TestCase):
@@ -145,7 +145,45 @@ class TestScriptHashes(unittest.TestCase):
 2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [CCCC] Lorem ipsum dol
 2024-06-11 21:52:26.604  INFO tokio-runtime-worker sc_basic_authorship::basic_authorship: 🎁 Prepared block for proposing at ...  [DDDD, CCCC, BBBB, AAAA]"
         """
-        modified_content, hash_to_word = replace_hashes(self.content)
+        modified_content, hash_to_word = replace_hashes(self.content, {})
+        self.assertEqual(modified_content, expected)
+
+
+class TestScriptDictionary(unittest.TestCase):
+    def setUp(self):
+        self.content = """
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [0x5064528fea22246df948814b11da057079fc02268a6321172392e36319ff652d] ValidatedPool::submit_at
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [0xd4418332fbea4124a743395aebfc4000829a7bdcd7afac0016b1c03106c56960] ValidatedPool::submit_at
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [0x5869c9a4f7bace630f90928e50dc27653a2fd996abcd9e57a6b9af8642ea21d2] ValidatedPool::submit_at
+2024-06-11 21:52:26.048 DEBUG tokio-runtime-worker txpool: [0xf9b677735803998fcce33eca325008f884a69dd036f0b5c1dcd8fb65bacb8cba] ValidatedPool::submit_at
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [0x5869…21d2] Lorem ipsum dol
+2024-06-11 21:52:26.048 DEBUG tokio-runtime-worker txpool: [0xf9b6…8cba] Lorem ipsum dol
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [0x5064…652d] Lorem ipsum dol
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [0xd441…6960] Lorem ipsum dol
+2024-06-11 21:52:26.604  INFO tokio-runtime-worker sc_basic_authorship::basic_authorship: 🎁 Prepared block for proposing at ...  [0x5064…652d, 0xd441…6960, 0x5869…21d2, 0xf9b6…8cba]"
+        """
+
+    def test_replace(self):
+        self.maxDiff = None
+        expected = """
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [DDDD] ValidatedPool::submit_at
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [CCCC] ValidatedPool::submit_at
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [BBBB] ValidatedPool::submit_at
+2024-06-11 21:52:26.048 DEBUG tokio-runtime-worker txpool: [AAAA] ValidatedPool::submit_at
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [BBBB] Lorem ipsum dol
+2024-06-11 21:52:26.048 DEBUG tokio-runtime-worker txpool: [AAAA] Lorem ipsum dol
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [DDDD] Lorem ipsum dol
+2024-06-11 21:52:26.047 DEBUG tokio-runtime-worker txpool: [CCCC] Lorem ipsum dol
+2024-06-11 21:52:26.604  INFO tokio-runtime-worker sc_basic_authorship::basic_authorship: 🎁 Prepared block for proposing at ...  [DDDD, CCCC, BBBB, AAAA]"
+        """
+        initial_hash_to_word = {}
+
+        initial_hash_to_word["0x5869…21d2"] = "BBBB"
+        initial_hash_to_word["0xf9b6…8cba"] = "AAAA"
+        initial_hash_to_word["0x5064…652d"] = "DDDD"
+        initial_hash_to_word["0xd441…6960"] = "CCCC"
+
+        modified_content, hash_to_word = replace_hashes(self.content, initial_hash_to_word)
         self.assertEqual(modified_content, expected)
 
 
@@ -182,7 +220,7 @@ class TestScriptRelayParachain(unittest.TestCase):
 2024-06-18 20:27:06.037  INFO tokio-runtime-worker substrate: [Parachain] 🆕 Imported #1412 (BLOCK1411 → BLOCK1412f01)
 2024-06-18 20:27:12.017  INFO tokio-runtime-worker substrate: [Relaychain] 🏆 Imported #1526 (RBLOCK1525 → RBLOCK1526)
         """
-        modified_content, hash_to_word = replace_hashes(self.content)
+        modified_content, hash_to_word = replace_hashes(self.content, {})
         self.assertEqual(modified_content, expected)
 
 class TestSpecificReplacement(unittest.TestCase):
@@ -195,7 +233,7 @@ class TestSpecificReplacement(unittest.TestCase):
         self.assertEqual((epattern, ereplacement, eguard), (pattern, replacement_prefix, guard))
         some_content = """Line 1: The quick brown fox jumps over the lazy dog.
         Line 2: [Relaychain] 🏆 Importex #1234 (0x1234…cdef → 0xabcd…5678)"""
-        modified_content, hash_to_word = replace_hashes(some_content)
+        modified_content, hash_to_word = replace_hashes(some_content, {})
         self.assertIn('XBLOCK1234', modified_content)
 
 if __name__ == '__main__':
