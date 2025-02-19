@@ -121,16 +121,17 @@ def replace_hashes(content, initial_hash_to_word):
             if len(h) == 66:
                 h = generate_short_hash(h)
 
-            replacement_word = f"{replacement_prefix}{number}"
+            if h not in hash_to_word:
+                replacement_word = f"{replacement_prefix}{number}"
 
-            final_word = replacement_word
-            suffix = 1
+                final_word = replacement_word
+                suffix = 1
 
-            while final_word in hash_to_word.values():
-                final_word = f"{replacement_word}f{suffix:02d}"
-                suffix += 1
+                while final_word in hash_to_word.values():
+                    final_word = f"{replacement_word}f{suffix:02d}"
+                    suffix += 1
 
-            hash_to_word[h] = final_word
+                hash_to_word[h] = final_word
     # print(f"2 Execution time: {time.time() - start_time}")
 
     start_time = time.time()
@@ -164,9 +165,8 @@ def write_dictionary_to_file(file_path, hash_to_word):
         for short_hash, word in hash_to_word.items():
             dict_file.write(f"{short_hash}: {word}\n")
 
-def read_dictionary_from_file(file_path):
+def read_dictionary_from_file(dict_file_path):
     """Read the hash-to-word dictionary from a file."""
-    dict_file_path = file_path + ".dict"
     hash_to_word = {}
     with open(dict_file_path, 'r') as dict_file:
         for line in dict_file:
