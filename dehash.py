@@ -20,17 +20,17 @@ def add_specific_replacement(pattern, replacement, guard):
     specific_replacements.append((pattern, replacement, guard))
 
 add_specific_replacement(
-        r".*\[Parachain\]...Imported #(?:\x1b\[[0-9;]*m)*(\d+)(?:\x1b\[[0-9;]*m)* \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
+        r".*\[Parachain\]...Imported #(\d+) \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
         "BLOCK",
         "Imported"
 )
 add_specific_replacement(
-        r".*\[.*\]...Imported #(?:\x1b\[[0-9;]*m)*(\d+)(?:\x1b\[[0-9;]*m)* \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
+        r".*\[.*\]...Imported #(\d+) \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
         "RBLOCK",
         "Imported"
 )
 add_specific_replacement(
-        r".*substrate:...Imported #(?:\x1b\[[0-9;]*m)*(\d+)(?:\x1b\[[0-9;]*m)* \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
+        r".*substrate:...Imported #(\d+) \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
         "BLOCK",
         "Imported"
 )
@@ -115,7 +115,7 @@ def replace_hashes(content, initial_hash_to_word):
         # print(f"X Execution time: {time.time() - match_start_time}")
 
         for match in matches:
-            print("found match:",match)
+            # print("found match:",match)
             number = match[0]
             h = match[1]
             if len(h) == 66:
@@ -182,7 +182,7 @@ def write_dot_file(content, file_path):
 
     # Extract parent-child relationships
     for line in lines:
-        match = re.search(r'Imported #(?:\x1b\[[0-9;]*m)*(\d+)(?:\x1b\[[0-9;]*m)* \((\w+) → (\w+)\)', line)
+        match = re.search(r'Imported #(\d+) \((\w+) → (\w+)\)', line)
         if match:
             parent = match.group(2)
             child = match.group(3)
@@ -198,13 +198,22 @@ def write_dot_file(content, file_path):
 
     # print(f"DOT file created at {dot_file_path}")
 
+
+def remove_control_chars(text):
+    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    control_chars = re.compile(r'[\x00-\x08\x0B-\x1F\x7F-\x9F]')
+    text = ansi_escape.sub('', text)
+    text = control_chars.sub('', text)
+    return text
+
+
 def process_file(file_path, backup, initial_hash_to_word):
     """Process the file by replacing hashes and creating backups if required."""
     if backup:
         create_backup(file_path)
 
     with open(file_path, 'r') as file:
-        content = file.read()
+        content = remove_control_chars(file.read())
 
     modified_content, hash_to_word = replace_hashes(content, initial_hash_to_word)
 
