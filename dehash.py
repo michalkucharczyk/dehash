@@ -20,17 +20,17 @@ def add_specific_replacement(pattern, replacement, guard):
     specific_replacements.append((pattern, replacement, guard))
 
 add_specific_replacement(
-        r".*\[Relaychain\]...Imported #(\d+) \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
-        "RBLOCK",
-        "Imported"
-)
-add_specific_replacement(
-        r".*\[Parachain\]...Imported #(\d+) \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
+        r".*\[Parachain\]...Imported #(?:\x1b\[[0-9;]*m)*(\d+)(?:\x1b\[[0-9;]*m)* \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
         "BLOCK",
         "Imported"
 )
 add_specific_replacement(
-        r".*substrate:...Imported #(\d+) \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
+        r".*\[.*\]...Imported #(?:\x1b\[[0-9;]*m)*(\d+)(?:\x1b\[[0-9;]*m)* \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
+        "RBLOCK",
+        "Imported"
+)
+add_specific_replacement(
+        r".*substrate:...Imported #(?:\x1b\[[0-9;]*m)*(\d+)(?:\x1b\[[0-9;]*m)* \(0x[0-9a-f]{4}…[0-9a-f]{4} → (0x[0-9a-f]{4}…[0-9a-f]{4})\)",
         "BLOCK",
         "Imported"
 )
@@ -115,7 +115,7 @@ def replace_hashes(content, initial_hash_to_word):
         # print(f"X Execution time: {time.time() - match_start_time}")
 
         for match in matches:
-            # print("found match:",match)
+            print("found match:",match)
             number = match[0]
             h = match[1]
             if len(h) == 66:
@@ -182,7 +182,7 @@ def write_dot_file(content, file_path):
 
     # Extract parent-child relationships
     for line in lines:
-        match = re.search(r'Imported #(\d+) \((\w+) → (\w+)\)', line)
+        match = re.search(r'Imported #(?:\x1b\[[0-9;]*m)*(\d+)(?:\x1b\[[0-9;]*m)* \((\w+) → (\w+)\)', line)
         if match:
             parent = match.group(2)
             child = match.group(3)
